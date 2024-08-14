@@ -1,10 +1,11 @@
 module Main exposing (..)
 
 import Browser
+import Css exposing (..)
 import Dict exposing (Dict)
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
+import Html.Styled exposing (..)
+import Html.Styled.Attributes as Ha exposing (css, placeholder, type_, value)
+import Html.Styled.Events exposing (..)
 import Http
 import Json.Decode as Dec exposing (Decoder)
 import List.Extra as Listx
@@ -134,6 +135,7 @@ makeGhRequests ghToken =
                 , headers =
                     if String.isEmpty ghToken then
                         []
+
                     else
                         [ Http.header "Authorization" ("Bearer " ++ ghToken) ]
                 , url = makeApiUrl link
@@ -174,44 +176,116 @@ parseUrl ghResp url =
 -- VIEW
 
 
-view : Model -> Html Msg
 view model =
-    div []
-        [ div []
+    div
+        [ css
+            [ backgroundColor theme.bg
+            , width (pct 100)
+            , height (vh 100)
+            , paddingTop (px 40)
+            , color theme.font
+            ]
+        , Ha.style "height" "calc(100vh - 40px)"
+        ]
+        [ view_ model ]
+        |> toUnstyled
+
+
+view_ : Model -> Html Msg
+view_ model =
+    div
+        [ css
+            [ margin auto, width (pct 100), maxWidth (px 750) ]
+        ]
+        [ div [ css [ textAlign center ] ] [ h1 [] [ text "Github Links Markdown Formatter" ] ]
+        , div []
             [ textarea
                 [ onInput SetLinks
                 , on "change" (Dec.succeed Submit)
                 , value model.linksText
+                , css
+                    ([ width (pct 100), minHeight (px 150), backgroundColor theme.textIn ]
+                        ++ textBorder
+                    )
                 ]
                 []
             ]
-        , div [ ] 
-           [ input 
-           [ placeholder "Github Personal Access Token" 
-           , type_ "password"
-           , onInput SetToken
-           ]
-           []
-           ]
-        , div []
+        , div [ css marginInput ]
+            [ input
+                [ placeholder "(Optional) Github Personal Access Token"
+                , type_ "password"
+                , onInput SetToken
+                , css
+                    ([ width (pct 100), textAlign center, backgroundColor theme.textIn ]
+                        ++ textBorder
+                    )
+                ]
+                []
+            ]
+        , div [ css marginInput ]
             [ details []
                 [ summary [] [ text "Output Format" ]
                 , text "Control the format of each link"
                 , br [] []
                 , text "Variables are:"
                 , ul []
-                    [ li [] [ strong [] [ text "{title}" ] , text ": The issue or PR title" ]
-                    , li [] [ strong [] [ text "{number}" ] , text ": The issue number" ]
-                    , li [] [ strong [] [ text "{repo}" ] , text ": The repository name" ]
-                    , li [] [ strong [] [ text "{owner}" ] , text ": The owner of the repository" ]
-                    , li [] [ strong [] [ text "{url}" ] , text ": The link url" ]
+                    [ li [] [ strong [] [ text "{title}" ], text ": The issue or PR title" ]
+                    , li [] [ strong [] [ text "{number}" ], text ": The issue number" ]
+                    , li [] [ strong [] [ text "{repo}" ], text ": The repository name" ]
+                    , li [] [ strong [] [ text "{owner}" ], text ": The owner of the repository" ]
+                    , li [] [ strong [] [ text "{url}" ], text ": The link url" ]
                     ]
-                , input [ onInput SetFmtstr, value model.fmtstr ] []
                 ]
             ]
-        , div [] [ button [ onClick Submit ] [ text "Submit" ] ]
-        , div [] [ pre [] [ code [] [ createMd model |> text ] ] ]
-        , div [] (createErrors model.errs)
+        , div []
+            [ input
+                [ onInput SetFmtstr
+                , value model.fmtstr
+                , css
+                    ([ width (pct 100)
+                     , textAlign center
+                     , backgroundColor theme.textIn
+                     , fontSize (Css.em 1.2)
+                     ]
+                        ++ textBorder
+                    )
+                ]
+                []
+            ]
+        , div
+            [ css <|
+                [ textAlign center
+                ]
+                    ++ marginInput
+            ]
+            [ button
+                [ onClick Submit
+                , css
+                    [ backgroundColor theme.btn
+                    , width (px 150)
+                    , fontSize (Css.em 1.2)
+                    , borderRadius (px 5)
+                    , padding (px 5)
+                    ]
+                ]
+                [ text "Submit" ]
+            ]
+        , div [] [ h3 [] [ text "Output" ] ]
+        , div []
+            [ Html.Styled.pre
+                [ css
+                    [ backgroundColor theme.textIn
+                    , width (pct 100)
+                    , borderRadius (px 5)
+                    , fontSize (Css.em 1.1)
+                    , padding2 (px 10) (px 20)
+                    , whiteSpace Css.pre
+                    , overflowX auto
+                    ]
+                ]
+                [ code [] [ createMd model |> text ] ]
+            ]
+        , createErrors model.errs
         ]
 
 
@@ -220,19 +294,67 @@ createMd model =
     let
         fmt md =
             String.replace "{title}" md.title model.fmtstr
-            |> String.replace "{number}" (String.fromInt md.number)
-            |> String.replace "{repo}" md.repo
-            |> String.replace "{owner}" md.owner
-            |> String.replace "{url}" md.url
+                |> String.replace "{number}" (String.fromInt md.number)
+                |> String.replace "{repo}" md.repo
+                |> String.replace "{owner}" md.owner
+                |> String.replace "{url}" md.url
     in
     Dict.values model.vars
         |> List.map fmt
         |> String.join "\n"
 
 
-createErrors =
+createErrors errs =
     let
+        error e =
+            case e of
+                Http.BadUrl s ->
+                    "Bad URL: " ++ s
+
+                Http.BadStatus s ->
+                    "Request failure with " ++ String.fromInt s
+
+                _ ->
+                    "Failed to query Github"
+
         createErr ( err, link ) =
-            div [] [ text link ]
+            div []
+                [ text link
+                , br [] []
+                , text (error err)
+                , br [] []
+                ]
+
+        errs2 =
+            List.map createErr errs
     in
-    List.map createErr
+    if List.isEmpty errs2 then
+        div [] []
+
+    else
+        div
+            [ css
+                [ backgroundColor (hex "e3955b")
+                , border3 (px 1) solid (hex "d1620f")
+                , borderRadius (px 5)
+                , width (pct 100)
+                , padding (px 20)
+                ]
+            ]
+            errs2
+
+
+marginInput =
+    [ marginTop (px 10) ]
+
+
+textBorder =
+    [ border zero, borderRadius (px 10) ]
+
+
+theme =
+    { bg = hex "D7D2CE"
+    , textIn = hex "F4F2F0"
+    , btn = hex "A99282"
+    , font = hex "5c544e"
+    }
