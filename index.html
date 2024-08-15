@@ -6081,6 +6081,13 @@ var $elm$core$Maybe$map = F2(
 			return $elm$core$Maybe$Nothing;
 		}
 	});
+var $elm$core$String$replace = F3(
+	function (before, after, string) {
+		return A2(
+			$elm$core$String$join,
+			after,
+			A2($elm$core$String$split, before, string));
+	});
 var $elm$url$Url$addPort = F2(
 	function (maybePort, starter) {
 		if (maybePort.$ === 1) {
@@ -6146,7 +6153,10 @@ var $author$project$Main$makeApiUrl = function (link) {
 				function (url) {
 					return _Utils_update(
 						url,
-						{cs: 'api.github.com', bR: '/repos' + url.bR});
+						{
+							cs: 'api.github.com',
+							bR: '/repos' + A3($elm$core$String$replace, '/pull/', '/issues/', url.bR)
+						});
 				},
 				$elm$url$Url$fromString(link))));
 };
@@ -6462,9 +6472,16 @@ var $rtfeldman$elm_css$Css$property = F2(
 var $rtfeldman$elm_css$Css$backgroundColor = function (c) {
 	return A2($rtfeldman$elm_css$Css$property, 'background-color', c.z);
 };
+var $rtfeldman$elm_css$Css$prop1 = F2(
+	function (key, arg) {
+		return A2($rtfeldman$elm_css$Css$property, key, arg.z);
+	});
+var $rtfeldman$elm_css$Css$boxSizing = $rtfeldman$elm_css$Css$prop1('box-sizing');
 var $rtfeldman$elm_css$Css$color = function (c) {
 	return A2($rtfeldman$elm_css$Css$property, 'color', c.z);
 };
+var $rtfeldman$elm_css$Css$Structure$Compatible = 0;
+var $rtfeldman$elm_css$Css$contentBox = {a5: 0, aO: 0, z: 'content-box'};
 var $rtfeldman$elm_css$VirtualDom$Styled$Attribute = F3(
 	function (a, b, c) {
 		return {$: 0, a: a, b: b, c: c};
@@ -8136,14 +8153,14 @@ var $rtfeldman$elm_css$VirtualDom$Styled$Node = F3(
 var $rtfeldman$elm_css$VirtualDom$Styled$node = $rtfeldman$elm_css$VirtualDom$Styled$Node;
 var $rtfeldman$elm_css$Html$Styled$node = $rtfeldman$elm_css$VirtualDom$Styled$node;
 var $rtfeldman$elm_css$Html$Styled$div = $rtfeldman$elm_css$Html$Styled$node('div');
-var $rtfeldman$elm_css$Css$prop1 = F2(
-	function (key, arg) {
-		return A2($rtfeldman$elm_css$Css$property, key, arg.z);
-	});
 var $rtfeldman$elm_css$Css$height = $rtfeldman$elm_css$Css$prop1('height');
+var $rtfeldman$elm_css$Css$prop2 = F3(
+	function (key, argA, argB) {
+		return A2($rtfeldman$elm_css$Css$property, key, argA.z + (' ' + argB.z));
+	});
+var $rtfeldman$elm_css$Css$padding2 = $rtfeldman$elm_css$Css$prop2('padding');
 var $rtfeldman$elm_css$Css$paddingTop = $rtfeldman$elm_css$Css$prop1('padding-top');
-var $rtfeldman$elm_css$Css$PercentageUnits = 0;
-var $rtfeldman$elm_css$Css$Structure$Compatible = 0;
+var $rtfeldman$elm_css$Css$PxUnits = 0;
 var $elm$core$String$fromFloat = _String_fromNumber;
 var $rtfeldman$elm_css$Css$Internal$lengthConverter = F3(
 	function (units, unitLabel, numericValue) {
@@ -8170,8 +8187,6 @@ var $rtfeldman$elm_css$Css$Internal$lengthConverter = F3(
 				unitLabel)
 		};
 	});
-var $rtfeldman$elm_css$Css$pct = A2($rtfeldman$elm_css$Css$Internal$lengthConverter, 0, '%');
-var $rtfeldman$elm_css$Css$PxUnits = 0;
 var $rtfeldman$elm_css$Css$px = A2($rtfeldman$elm_css$Css$Internal$lengthConverter, 0, 'px');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $rtfeldman$elm_css$VirtualDom$Styled$style = F2(
@@ -8899,13 +8914,6 @@ var $elm$core$Dict$foldl = F3(
 			}
 		}
 	});
-var $elm$core$String$replace = F3(
-	function (before, after, string) {
-		return A2(
-			$elm$core$String$join,
-			after,
-			A2($elm$core$String$split, before, string));
-	});
 var $rtfeldman$elm_css$VirtualDom$Styled$styleToDeclaration = F3(
 	function (template, classname, declaration) {
 		return declaration + ('\n' + A3($elm$core$String$replace, $rtfeldman$elm_css$VirtualDom$Styled$classnameStandin, classname, template));
@@ -9171,17 +9179,24 @@ var $author$project$Main$SetToken = function (a) {
 };
 var $author$project$Main$Submit = {$: 1};
 var $rtfeldman$elm_css$Css$auto = {ce: 0, a: 0, aa: 0, aS: 0, cw: 0, ad: 0, E: 0, x: 0, ah: 0, u: 0, a_: 0, am: 0, q: 0, z: 'auto'};
+var $rtfeldman$elm_css$Css$border = $rtfeldman$elm_css$Css$prop1('border');
 var $rtfeldman$elm_css$Css$borderRadius = $rtfeldman$elm_css$Css$prop1('border-radius');
 var $rtfeldman$elm_css$Html$Styled$br = $rtfeldman$elm_css$Html$Styled$node('br');
 var $rtfeldman$elm_css$Html$Styled$button = $rtfeldman$elm_css$Html$Styled$node('button');
 var $rtfeldman$elm_css$Css$center = $rtfeldman$elm_css$Css$prop1('center');
 var $rtfeldman$elm_css$Html$Styled$code = $rtfeldman$elm_css$Html$Styled$node('code');
+var $rtfeldman$elm_css$Css$row = {a6: 0, av: 0, z: 'row'};
+var $rtfeldman$elm_css$Css$column = _Utils_update(
+	$rtfeldman$elm_css$Css$row,
+	{z: 'column'});
 var $rtfeldman$elm_css$Css$prop3 = F4(
 	function (key, argA, argB, argC) {
 		return A2($rtfeldman$elm_css$Css$property, key, argA.z + (' ' + (argB.z + (' ' + argC.z))));
 	});
 var $rtfeldman$elm_css$Css$border3 = $rtfeldman$elm_css$Css$prop3('border');
 var $rtfeldman$elm_css$Css$padding = $rtfeldman$elm_css$Css$prop1('padding');
+var $rtfeldman$elm_css$Css$PercentageUnits = 0;
+var $rtfeldman$elm_css$Css$pct = A2($rtfeldman$elm_css$Css$Internal$lengthConverter, 0, '%');
 var $rtfeldman$elm_css$Css$solid = {n: 0, S: 0, z: 'solid'};
 var $rtfeldman$elm_css$VirtualDom$Styled$Unstyled = function (a) {
 	return {$: 4, a: a};
@@ -9275,17 +9290,23 @@ var $author$project$Main$createMd = function (model) {
 						$elm$core$String$fromInt(md.aD),
 						A3($elm$core$String$replace, '{title}', md.an, model.aw)))));
 	};
-	return A2(
-		$elm$core$String$join,
-		'\n',
+	return function (x) {
+		return x + '\n\n';
+	}(
 		A2(
-			$elm$core$List$map,
-			fmt,
-			$elm$core$Dict$values(model.ap)));
+			$elm$core$String$join,
+			'\n',
+			A2(
+				$elm$core$List$map,
+				fmt,
+				$elm$core$Dict$values(model.ap))));
 };
+var $rtfeldman$elm_css$Css$cursor = $rtfeldman$elm_css$Css$prop1('cursor');
 var $rtfeldman$elm_css$Html$Styled$details = $rtfeldman$elm_css$Html$Styled$node('details');
+var $rtfeldman$elm_css$Css$displayFlex = A2($rtfeldman$elm_css$Css$property, 'display', 'flex');
 var $rtfeldman$elm_css$Css$EmUnits = 0;
 var $rtfeldman$elm_css$Css$em = A2($rtfeldman$elm_css$Css$Internal$lengthConverter, 0, 'em');
+var $rtfeldman$elm_css$Css$flexDirection = $rtfeldman$elm_css$Css$prop1('flex-direction');
 var $rtfeldman$elm_css$Css$fontSize = $rtfeldman$elm_css$Css$prop1('font-size');
 var $rtfeldman$elm_css$Html$Styled$h1 = $rtfeldman$elm_css$Html$Styled$node('h1');
 var $rtfeldman$elm_css$Html$Styled$h3 = $rtfeldman$elm_css$Html$Styled$node('h3');
@@ -9357,11 +9378,6 @@ var $rtfeldman$elm_css$Html$Styled$Events$onInput = function (tagger) {
 			A2($elm$json$Json$Decode$map, tagger, $rtfeldman$elm_css$Html$Styled$Events$targetValue)));
 };
 var $rtfeldman$elm_css$Css$overflowX = $rtfeldman$elm_css$Css$prop1('overflow-x');
-var $rtfeldman$elm_css$Css$prop2 = F3(
-	function (key, argA, argB) {
-		return A2($rtfeldman$elm_css$Css$property, key, argA.z + (' ' + argB.z));
-	});
-var $rtfeldman$elm_css$Css$padding2 = $rtfeldman$elm_css$Css$prop2('padding');
 var $rtfeldman$elm_css$VirtualDom$Styled$property = F2(
 	function (key, value) {
 		return A3(
@@ -9378,6 +9394,7 @@ var $rtfeldman$elm_css$Html$Styled$Attributes$stringProperty = F2(
 			$elm$json$Json$Encode$string(string));
 	});
 var $rtfeldman$elm_css$Html$Styled$Attributes$placeholder = $rtfeldman$elm_css$Html$Styled$Attributes$stringProperty('placeholder');
+var $rtfeldman$elm_css$Css$pointer = {a: 0, z: 'pointer'};
 var $rtfeldman$elm_css$Css$pre = {z: 'pre', V: 0};
 var $rtfeldman$elm_css$Html$Styled$pre = $rtfeldman$elm_css$Html$Styled$node('pre');
 var $rtfeldman$elm_css$Html$Styled$strong = $rtfeldman$elm_css$Html$Styled$node('strong');
@@ -9454,7 +9471,6 @@ var $rtfeldman$elm_css$Css$textAlign = function (fn) {
 		'text-align',
 		fn($rtfeldman$elm_css$Css$Internal$lengthForOverloadedProperty));
 };
-var $rtfeldman$elm_css$Css$border = $rtfeldman$elm_css$Css$prop1('border');
 var $rtfeldman$elm_css$Css$UnitlessInteger = 0;
 var $rtfeldman$elm_css$Css$zero = {az: 0, ad: 0, E: 0, ae: 0, af: 0, N: 0, O: 0, aD: 0, G: 0, aW: 0, ao: '', aL: 0, z: '0'};
 var $author$project$Main$textBorder = _List_fromArray(
@@ -9463,6 +9479,7 @@ var $author$project$Main$textBorder = _List_fromArray(
 		$rtfeldman$elm_css$Css$borderRadius(
 		$rtfeldman$elm_css$Css$px(10))
 	]);
+var $rtfeldman$elm_css$Css$text_ = {a: 0, z: 'text'};
 var $rtfeldman$elm_css$Html$Styled$textarea = $rtfeldman$elm_css$Html$Styled$node('textarea');
 var $rtfeldman$elm_css$Html$Styled$Attributes$type_ = $rtfeldman$elm_css$Html$Styled$Attributes$stringProperty('type');
 var $rtfeldman$elm_css$Html$Styled$ul = $rtfeldman$elm_css$Html$Styled$node('ul');
@@ -9476,11 +9493,11 @@ var $author$project$Main$view_ = function (model) {
 				$rtfeldman$elm_css$Html$Styled$Attributes$css(
 				_List_fromArray(
 					[
-						$rtfeldman$elm_css$Css$margin($rtfeldman$elm_css$Css$auto),
-						$rtfeldman$elm_css$Css$width(
-						$rtfeldman$elm_css$Css$pct(100)),
 						$rtfeldman$elm_css$Css$maxWidth(
-						$rtfeldman$elm_css$Css$px(750))
+						$rtfeldman$elm_css$Css$px(750)),
+						$rtfeldman$elm_css$Css$displayFlex,
+						$rtfeldman$elm_css$Css$flexDirection($rtfeldman$elm_css$Css$column),
+						$rtfeldman$elm_css$Css$margin($rtfeldman$elm_css$Css$auto)
 					]))
 			]),
 		_List_fromArray(
@@ -9520,6 +9537,7 @@ var $author$project$Main$view_ = function (model) {
 								'change',
 								$elm$json$Json$Decode$succeed($author$project$Main$Submit)),
 								$rtfeldman$elm_css$Html$Styled$Attributes$value(model.aC),
+								$rtfeldman$elm_css$Html$Styled$Attributes$placeholder('Paste URLs to Github issues or pull-requests'),
 								$rtfeldman$elm_css$Html$Styled$Attributes$css(
 								_Utils_ap(
 									_List_fromArray(
@@ -9577,7 +9595,14 @@ var $author$project$Main$view_ = function (model) {
 							[
 								A2(
 								$rtfeldman$elm_css$Html$Styled$summary,
-								_List_Nil,
+								_List_fromArray(
+									[
+										$rtfeldman$elm_css$Html$Styled$Attributes$css(
+										_List_fromArray(
+											[
+												$rtfeldman$elm_css$Css$cursor($rtfeldman$elm_css$Css$pointer)
+											]))
+									]),
 								_List_fromArray(
 									[
 										$rtfeldman$elm_css$Html$Styled$text('Output Format')
@@ -9712,6 +9737,7 @@ var $author$project$Main$view_ = function (model) {
 								_List_fromArray(
 									[
 										$rtfeldman$elm_css$Css$backgroundColor($author$project$Main$theme.bw),
+										$rtfeldman$elm_css$Css$border($rtfeldman$elm_css$Css$zero),
 										$rtfeldman$elm_css$Css$width(
 										$rtfeldman$elm_css$Css$px(150)),
 										$rtfeldman$elm_css$Css$fontSize(
@@ -9719,7 +9745,8 @@ var $author$project$Main$view_ = function (model) {
 										$rtfeldman$elm_css$Css$borderRadius(
 										$rtfeldman$elm_css$Css$px(5)),
 										$rtfeldman$elm_css$Css$padding(
-										$rtfeldman$elm_css$Css$px(5))
+										$rtfeldman$elm_css$Css$px(5)),
+										$rtfeldman$elm_css$Css$cursor($rtfeldman$elm_css$Css$pointer)
 									]))
 							]),
 						_List_fromArray(
@@ -9753,8 +9780,6 @@ var $author$project$Main$view_ = function (model) {
 								_List_fromArray(
 									[
 										$rtfeldman$elm_css$Css$backgroundColor($author$project$Main$theme.aH),
-										$rtfeldman$elm_css$Css$width(
-										$rtfeldman$elm_css$Css$pct(100)),
 										$rtfeldman$elm_css$Css$borderRadius(
 										$rtfeldman$elm_css$Css$px(5)),
 										$rtfeldman$elm_css$Css$fontSize(
@@ -9764,7 +9789,8 @@ var $author$project$Main$view_ = function (model) {
 										$rtfeldman$elm_css$Css$px(10),
 										$rtfeldman$elm_css$Css$px(20)),
 										$rtfeldman$elm_css$Css$whiteSpace($rtfeldman$elm_css$Css$pre),
-										$rtfeldman$elm_css$Css$overflowX($rtfeldman$elm_css$Css$auto)
+										$rtfeldman$elm_css$Css$overflowX($rtfeldman$elm_css$Css$auto),
+										$rtfeldman$elm_css$Css$cursor($rtfeldman$elm_css$Css$text_)
 									]))
 							]),
 						_List_fromArray(
@@ -9792,13 +9818,16 @@ var $author$project$Main$view = function (model) {
 					_List_fromArray(
 						[
 							$rtfeldman$elm_css$Css$backgroundColor($author$project$Main$theme.br),
-							$rtfeldman$elm_css$Css$width(
-							$rtfeldman$elm_css$Css$pct(100)),
 							$rtfeldman$elm_css$Css$height(
 							$rtfeldman$elm_css$Css$vh(100)),
+							A2(
+							$rtfeldman$elm_css$Css$padding2,
+							$rtfeldman$elm_css$Css$zero,
+							$rtfeldman$elm_css$Css$px(20)),
 							$rtfeldman$elm_css$Css$paddingTop(
 							$rtfeldman$elm_css$Css$px(40)),
-							$rtfeldman$elm_css$Css$color($author$project$Main$theme.bG)
+							$rtfeldman$elm_css$Css$color($author$project$Main$theme.bG),
+							$rtfeldman$elm_css$Css$boxSizing($rtfeldman$elm_css$Css$contentBox)
 						])),
 					A2($rtfeldman$elm_css$Html$Styled$Attributes$style, 'height', 'calc(100vh - 40px)')
 				]),
