@@ -180,10 +180,11 @@ view model =
     div
         [ css
             [ backgroundColor theme.bg
-            , width (pct 100)
             , height (vh 100)
+            , padding2 zero (px 20)
             , paddingTop (px 40)
             , color theme.font
+            , boxSizing contentBox
             ]
         , Ha.style "height" "calc(100vh - 40px)"
         ]
@@ -195,7 +196,7 @@ view_ : Model -> Html Msg
 view_ model =
     div
         [ css
-            [ margin auto, width (pct 100), maxWidth (px 750) ]
+            [ maxWidth (px 750), displayFlex, flexDirection column, margin auto ]
         ]
         [ div [ css [ textAlign center ] ] [ h1 [] [ text "Github Links Markdown Formatter" ] ]
         , div []
@@ -203,6 +204,7 @@ view_ model =
                 [ onInput SetLinks
                 , on "change" (Dec.succeed Submit)
                 , value model.linksText
+                , placeholder "Paste URLs to Github issues or pull-requests"
                 , css
                     ([ width (pct 100), minHeight (px 150), backgroundColor theme.textIn ]
                         ++ textBorder
@@ -224,7 +226,7 @@ view_ model =
             ]
         , div [ css marginInput ]
             [ details []
-                [ summary [] [ text "Output Format" ]
+                [ summary [ css [ cursor pointer ] ] [ text "Output Format" ]
                 , text "Control the format of each link"
                 , br [] []
                 , text "Variables are:"
@@ -262,10 +264,12 @@ view_ model =
                 [ onClick Submit
                 , css
                     [ backgroundColor theme.btn
+                    , border zero
                     , width (px 150)
                     , fontSize (Css.em 1.2)
                     , borderRadius (px 5)
                     , padding (px 5)
+                    , cursor pointer
                     ]
                 ]
                 [ text "Submit" ]
@@ -275,12 +279,12 @@ view_ model =
             [ Html.Styled.pre
                 [ css
                     [ backgroundColor theme.textIn
-                    , width (pct 100)
                     , borderRadius (px 5)
                     , fontSize (Css.em 1.1)
                     , padding2 (px 10) (px 20)
                     , whiteSpace Css.pre
                     , overflowX auto
+                    , cursor text_
                     ]
                 ]
                 [ code [] [ createMd model |> text ] ]
@@ -302,6 +306,7 @@ createMd model =
     Dict.values model.vars
         |> List.map fmt
         |> String.join "\n"
+        |> (\x -> x ++ "\n\n")
 
 
 createErrors errs =
