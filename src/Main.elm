@@ -119,7 +119,7 @@ makeApiUrl link =
             (\url ->
                 { url
                     | host = "api.github.com"
-                    , path = "/repos" ++ url.path
+                    , path = "/repos" ++ (String.replace "/pull/" "/issues/" url.path)
                 }
             )
         |> Maybe.map Url.toString
